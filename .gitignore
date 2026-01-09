@@ -1,0 +1,20 @@
+# Read-only upstreams — study references only, re-clonable (see NOTES.md).
+# Large (~300MB) and contain their own .git; not part of the deliverable.
+reference/
+
+# macOS
+.DS_Store
+
+# Xcode / iOS build artifacts & dependency caches (regenerated locally)
+Pods/
+Carthage/Build/
+Carthage/Checkouts/
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
