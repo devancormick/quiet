@@ -52,12 +52,9 @@ jobs:
       - name: Install xcbeautify
         run: brew install xcbeautify
 
-      # Build against the iOS device SDK (generic/platform=iOS), not the
-      # Simulator. This matches how the app actually ships and avoids a
-      # Simulator-only libresolv quirk: on the Simulator SDK the res_9_* APIs
-      # import with a different pointer signature, which fails to compile in
-      # PacketTunnelProvider.swift. Signing stays disabled, so no Apple
-      # account is needed.
+      # Build against the iOS device SDK (generic/platform=iOS) — this is how
+      # the app actually ships, and the vendored xcframeworks include ios-arm64
+      # slices. Signing stays disabled, so no Apple account is needed.
       - name: Build Quiet (device SDK, signing disabled)
         run: |
           set -o pipefail

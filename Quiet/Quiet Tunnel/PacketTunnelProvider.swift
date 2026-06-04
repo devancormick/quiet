@@ -451,19 +451,26 @@ open class Resolver {
 
     fileprivate var state = __res_9_state()
 
+    // The iOS 18 SDK imports the libresolv res_9_* functions as taking a
+    // pointer to __res_9_state. Passing `&state` directly imports as a
+    // double-pointer and fails to compile, so go through
+    // withUnsafeMutablePointer to hand over a plain
+    // UnsafeMutablePointer<__res_9_state>.
     public init() {
-        res_9_ninit(&state)
+        withUnsafeMutablePointer(to: &state) { _ = res_9_ninit($0) }
     }
 
     deinit {
-        res_9_ndestroy(&state)
+        withUnsafeMutablePointer(to: &state) { res_9_ndestroy($0) }
     }
 
     public final func getservers() -> [res_9_sockaddr_union] {
 
         let maxServers = 10
         var servers = [res_9_sockaddr_union](repeating: res_9_sockaddr_union(), count: maxServers)
-        let found = Int(res_9_getservers(&state, &servers, Int32(maxServers)))
+        let found = withUnsafeMutablePointer(to: &state) { statePtr in
+            Int(res_9_getservers(statePtr, &servers, Int32(maxServers)))
+        }
 
         // filter is to remove the erroneous empty entry when there's no real servers
        return Array(servers[0 ..< found]).filter() { $0.sin.sin_len > 0 }
