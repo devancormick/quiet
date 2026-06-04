@@ -451,26 +451,23 @@ open class Resolver {
 
     fileprivate var state = __res_9_state()
 
-    // The iOS 18 SDK imports the libresolv res_9_* functions as taking a
-    // pointer to __res_9_state. Passing `&state` directly imports as a
-    // double-pointer and fails to compile, so go through
-    // withUnsafeMutablePointer to hand over a plain
-    // UnsafeMutablePointer<__res_9_state>.
+    // Call the quiet_res_* shims declared in QuietTunnelBridgingHeader.h
+    // rather than the raw res_9_* symbols: the iOS 18 SDK imports the raw
+    // functions with a pointer signature this code can't satisfy. The shims
+    // take an explicit `struct __res_9_state *`, so `&state` resolves cleanly.
     public init() {
-        withUnsafeMutablePointer(to: &state) { _ = res_9_ninit($0) }
+        _ = quiet_res_ninit(&state)
     }
 
     deinit {
-        withUnsafeMutablePointer(to: &state) { res_9_ndestroy($0) }
+        quiet_res_ndestroy(&state)
     }
 
     public final func getservers() -> [res_9_sockaddr_union] {
 
         let maxServers = 10
         var servers = [res_9_sockaddr_union](repeating: res_9_sockaddr_union(), count: maxServers)
-        let found = withUnsafeMutablePointer(to: &state) { statePtr in
-            Int(res_9_getservers(statePtr, &servers, Int32(maxServers)))
-        }
+        let found = Int(quiet_res_getservers(&state, &servers, Int32(maxServers)))
 
         // filter is to remove the erroneous empty entry when there's no real servers
        return Array(servers[0 ..< found]).filter() { $0.sin.sin_len > 0 }
