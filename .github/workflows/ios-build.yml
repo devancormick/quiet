@@ -1,0 +1,67 @@
+name: iOS build (compile check)
+
+# Compile-checks the Quiet app on a macOS runner. This does NOT code-sign,
+# install, or run the VPN packet-tunnel extension — that requires a paid Apple
+# Developer account and a real iPhone (see MANUAL-STEPS.md). This job only
+# verifies the project and its Swift sources compile.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Carthage frameworks are already vendored in Quiet/ThirdPartyFrameworks/, so CI
+# only needs CocoaPods. No `carthage update` step is required.
+
+jobs:
+  build:
+    name: Build (iOS Simulator, no signing)
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: Quiet
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode.app
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+          ruby --version
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: Quiet/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('Quiet/Podfile') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install CocoaPods + plugin
+        run: |
+          gem install cocoapods cocoapods-acknowledgements --no-document
+          pod install --repo-update
+
+      - name: Install xcbeautify
+        run: brew install xcbeautify
+
+      - name: Build Quiet (Simulator, signing disabled)
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -workspace Quiet.xcworkspace \
+            -scheme Quiet \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            | xcbeautify --renderer github-actions
