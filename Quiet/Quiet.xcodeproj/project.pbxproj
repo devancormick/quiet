@@ -387,7 +387,6 @@
 		A1DBA18621B77C66008A9322 /* VPNSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DBA18521B77C66008A9322 /* VPNSubscription.swift */; };
 		A1DBA18A21B77C80008A9322 /* VPNController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DBA18921B77C80008A9322 /* VPNController.swift */; };
 		A1DBA18B21B77C88008A9322 /* VPNController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DBA18921B77C80008A9322 /* VPNController.swift */; };
-		A1DBA19621B82F73008A9322 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = A1DBA19521B82F72008A9322 /* LICENSE.md */; };
 		A1E7481A1F9108B6004B8021 /* SpeedTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E748191F9108B6004B8021 /* SpeedTest.swift */; };
 		A1E78D13207BE58C007FAE70 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E78D12207BE58C007FAE70 /* CloudKit.framework */; };
 		A1EBEACB2097AE6E002B9087 /* M13CheckboxDisclosurePathGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EBEAB82097AE5B002B9087 /* M13CheckboxDisclosurePathGenerator.swift */; };
@@ -895,7 +894,6 @@
 		A1DBA18521B77C66008A9322 /* VPNSubscription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VPNSubscription.swift; path = Quiet/VPNSubscription.swift; sourceTree = "<group>"; };
 		A1DBA18921B77C80008A9322 /* VPNController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VPNController.swift; path = Quiet/VPNController.swift; sourceTree = "<group>"; };
 		A1DBA19421B77CE9008A9322 /* Quiet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Quiet.entitlements; sourceTree = "<group>"; };
-		A1DBA19521B82F72008A9322 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		A1E748191F9108B6004B8021 /* SpeedTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedTest.swift; sourceTree = "<group>"; };
 		A1E78D12207BE58C007FAE70 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		A1EBEAB82097AE5B002B9087 /* M13CheckboxDisclosurePathGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = M13CheckboxDisclosurePathGenerator.swift; sourceTree = "<group>"; };
@@ -1918,7 +1916,6 @@
 				A12473F51FE44285008493B8 /* Today */,
 				92635DE62BF786D20044673D /* WidgetExtension */,
 				A1FCDA4222C0651300C928BC /* Quiet Tunnel */,
-				A1DBA19521B82F72008A9322 /* LICENSE.md */,
 				A1141A1B1F46230500F54698 /* Assets.xcassets */,
 				A1FCDA8322CDE5ED00C928BC /* Block Lists */,
 				3D44377922DFB22600908CDC /* Fonts */,
@@ -2597,7 +2594,6 @@
 				A1FCDA8B22D3BA1900C928BC /* facebook_inc.txt in Resources */,
 				92CCC17D2BF22ABE00C38E1C /* PrivacyInfo.xcprivacy in Resources */,
 				3D0971D822EBAD1000CCD326 /* facebook_sdk.txt in Resources */,
-				A1DBA19621B82F73008A9322 /* LICENSE.md in Resources */,
 				3D4D7FEC247F2435000369FD /* google_shopping_ads.txt in Resources */,
 				3D3BF4CC233D5E9100D0C482 /* Localizable.strings in Resources */,
 				3D752C352357FA3B00C163E4 /* SF-Pro-Rounded-Medium.otf in Resources */,
