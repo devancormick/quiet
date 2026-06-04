@@ -449,25 +449,24 @@ extension PacketTunnelProvider {
 
 open class Resolver {
 
-    fileprivate var state = __res_9_state()
+    // The iOS 18 SDK no longer lets Swift hold a __res_9_state value usably
+    // (see QuietTunnelBridgingHeader.h). Keep the state in C as an opaque
+    // pointer that the quiet_res_* shims allocate, initialize, and free.
+    private let state: UnsafeMutablePointer<__res_9_state>
 
-    // Call the quiet_res_* shims declared in QuietTunnelBridgingHeader.h
-    // rather than the raw res_9_* symbols: the iOS 18 SDK imports the raw
-    // functions with a pointer signature this code can't satisfy. The shims
-    // take an explicit `struct __res_9_state *`, so `&state` resolves cleanly.
     public init() {
-        _ = quiet_res_ninit(&state)
+        state = quiet_res_alloc()
     }
 
     deinit {
-        quiet_res_ndestroy(&state)
+        quiet_res_free(state)
     }
 
     public final func getservers() -> [res_9_sockaddr_union] {
 
         let maxServers = 10
         var servers = [res_9_sockaddr_union](repeating: res_9_sockaddr_union(), count: maxServers)
-        let found = Int(quiet_res_getservers(&state, &servers, Int32(maxServers)))
+        let found = Int(quiet_res_getservers(state, &servers, Int32(maxServers)))
 
         // filter is to remove the erroneous empty entry when there's no real servers
        return Array(servers[0 ..< found]).filter() { $0.sin.sin_len > 0 }
