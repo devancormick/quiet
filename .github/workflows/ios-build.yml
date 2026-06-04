@@ -17,7 +17,7 @@ on:
 
 jobs:
   build:
-    name: Build (iOS Simulator, no signing)
+    name: Build (iOS device SDK, no signing)
     runs-on: macos-15
     defaults:
       run:
@@ -52,14 +52,20 @@ jobs:
       - name: Install xcbeautify
         run: brew install xcbeautify
 
-      - name: Build Quiet (Simulator, signing disabled)
+      # Build against the iOS device SDK (generic/platform=iOS), not the
+      # Simulator. This matches how the app actually ships and avoids a
+      # Simulator-only libresolv quirk: on the Simulator SDK the res_9_* APIs
+      # import with a different pointer signature, which fails to compile in
+      # PacketTunnelProvider.swift. Signing stays disabled, so no Apple
+      # account is needed.
+      - name: Build Quiet (device SDK, signing disabled)
         run: |
           set -o pipefail
           xcodebuild build \
             -workspace Quiet.xcworkspace \
             -scheme Quiet \
             -configuration Debug \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'generic/platform=iOS' \
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
