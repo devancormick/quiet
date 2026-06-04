@@ -61,6 +61,9 @@ jobs:
       - name: Build Quiet (device SDK, signing disabled)
         run: |
           set -o pipefail
+          # Tee the full raw xcodebuild output to a file so the real error
+          # survives xcbeautify's filtering, then pretty-print to the log.
+          # ENABLE_PREVIEWS=NO skips the SwiftUI preview thunk dylib (CI noise).
           xcodebuild build \
             -workspace Quiet.xcworkspace \
             -scheme Quiet \
@@ -70,4 +73,16 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
-            | xcbeautify --renderer github-actions
+            ENABLE_PREVIEWS=NO \
+            2>&1 | tee xcodebuild-raw.log | xcbeautify --renderer github-actions
+
+      - name: Show raw build errors on failure
+        if: failure()
+        run: |
+          echo "::group::Raw xcodebuild error lines"
+          grep -nE "error:|BUILD FAILED|Command .* failed|ld: |No profiles|requires a provisioning|code signing" xcodebuild-raw.log || \
+            echo "(no explicit 'error:' lines found — printing last 80 raw lines)"
+          echo "::endgroup::"
+          echo "::group::Last 80 raw lines"
+          tail -80 xcodebuild-raw.log
+          echo "::endgroup::"
